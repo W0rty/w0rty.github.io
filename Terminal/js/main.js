@@ -73,6 +73,7 @@ var files = (function () {
         "About.txt": "I'm a second year computer science student in Vannes. Later, I would like to work in cyber security, especially in a company or in a red team.\nI've been passionate about this field for a long time and I'm very interested in it via different social networks (facebook, twitter).\nI'm part of a CTF team : saladetomate.onion for 1 year now. In addition, I very often do CTF online but also on site, such as the Breizh CTF, the CTF of the IUT Informatiques, or the EsnaHack CTF.",
         "Root_Me.txt": "https://www.root-me.org/Worty",
         "Twitter.txt": "https://twitter.com/WortySTO",
+        "Flag.txt":"Hero{1ts_w0rty_birthd4y_!!}"
     };
     return {
         getInstance: function (options) {

@@ -14,7 +14,7 @@ var configs = (function () {
         }
     };
     Singleton.defaultOptions = {
-        welcome: "Welcome to my website!\nI have one question, Are you comfortable with a linux terminal?\nEnter yes or no, please.",
+        welcome: "Welcome to my website!\nI have one question, Are you comfortable with a linux terminal?\nEnter yes or no, please.\nOh and by the way my birthdate is 13/11/2000, enter yes to have your reward!",
         internet_explorer_warning: "NOTE: I see you're using internet explorer, this sound bad for this website and your security.",
         invalid_command_message: "Please, answer yes or no.",
         host: "wortyClient",
