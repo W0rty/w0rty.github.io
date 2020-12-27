@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Forensic - Administration</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../forensic.html" title="Forensic">Forensic</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Administration</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Forensic - Redaction</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ---------------------------------------------------------------------------------------------------------------------------------------<br>
+                Académie de l'investigation - Administration<br>
+                Ce poste administre un serveur distant avec le protocole SSH à l'aide d'une authentification par clé (clé protégée par mot de passe). <br>
+                La clé publique a été utilisée pour chiffrer le message ci-joint (flag.txt.enc). <br>
+
+                Retrouvez et reconstituez la clé en mémoire qui permettra de déchiffrer ce message.<br>
+
+                ---------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                First of all, I tried to retrieve the key from memory, but, by hand, it would have taken a very long time. So I used a tool foundeds on git to do it for me, nammed <a target="_blank" href="https://github.com/congwang/rsakeyfind">rsakeyfind.</a>
+            </p>
+            <div class="text-center">
+                <img src="../img/administration.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                After that I found another tool on git that allows to recreate a private key from n and d, called <a target="_blank" href="https://github.com/ius/rsatool">rsatool</a>.<br>
+                So let's rebuild our private key and then decrypt the file ! <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/admnistration1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <div class="text-center">
+                <img src="../img/administration2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                So he's recreating our private key! So let's use openssl to decrypt the flag.txt.enc :
+            </p>
+            <div class="text-center">
+                <img src="../img/administration3.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We finally got our flag : FCSC{ac5cad66114d4866a4b55e43cb8896cc4947855241b5af8d2f8a123c36083d98}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

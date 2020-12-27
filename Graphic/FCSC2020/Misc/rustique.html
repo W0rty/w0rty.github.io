@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Misc - Le Rustique</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../misc.html" title="Misc">Misc</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Le Rustique</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Misc - Le Rustique</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------<br>
+                Le Rustique<br>
+                On vous demande d'auditer cette solution de vérification syntaxique en Rust.<br>
+                -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                To start this challenge, I will directly read the FAQ related to the challenge. Here, I can learn several things: Past code is never executed, and in any case, the server will only return "0" or "1" in relation to the compilation.<br>
+                So I remember the compiler version used: "version 1.41.0". I'm looking for possible flaws on the version of this compiler. I fall an article about a CVE (Remote code execution in bitvec and Rust), but it happens at code execution, so it's not that.<br>
+                So I read about rust, and I find a compiler online : rust playground. I'm going to use it for this challenge, to test my different payloads, and to be able to simply identify my errors. After several researches, I see, that when compiling, you can include string/bytes from :<br>
+                include_bytes !('/PATH/TO/FILE');<br><br>
+                Having read the FAQ, I know that a /flag.txt file is placed at the root of the server. So I decide to try to load this :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Success! We manage to load the bytes that make up the flag, but now we can't display it because the code isn't executed, so we'll have to find a way to do that.<br>
+                My first hypothesis is to make macro_rules! with rust, but, despite many tests, I can't make comparisons on the bytes that make up the flag. So I decide to give up this idea.<br>
+                While I was enquiring about the rust compiler, I found a sub reddit that talks about array handling during compilation: When you declare an array in rust, it knows its size at compile time. So I keep this in a note for the future.<br><br>
+
+                At the same time, I'm asking about the type that include_bytes returns. I learn that include_bytes returns an object that is close to an array, in other words, all bytes are contained in an array box, here, the array would be name "flag".<br>
+                From then on, I'm going to do some tests with rust-playground, to check what I found on the internet:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We can see that the variable "flag" is managed as an array. Great! This is going to be very handy ...for the rest of it.<br>
+                After "playing" with rust playground and apprehending a little more the language, an idea comes to me:<br>
+                I could create another array that has the value of flag[i] as its size, and find its size for determine character.<br>
+                So I'm asking about how to declare a painting in rust. With my research, I find that I can assign a size to an array before assigning a value to it, in other words, I could do this to determine the size of the flag. <br>
+                So I compare it to other challenges, and I finds that the flags are 71 in size. So I test this in the compiler:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Note that if I change 71 by 70, rust denies me the compilation because it can't store the whole flag.txt file in the flag array. So we are now sure that the size of the flag is 71, which seems logical.<br>
+                Now, I will try to exploit my hypothesis, that of creating an array of the size of flag[i], to do so, I will use once again rust playground, to identify my errors : <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique3.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                According to the compiler, flag[0] is not a constant value, so I search the internet, and a simple way to set this is to declare the flag array as a constant with the keyword const.<br>
+                One last problem: flag[0] is a bytes, for example \x01, so I'll have to find a way to cast it in "usize", to be able to instantiate the array with it.<br>
+                To do so, we will use the keyword: "as usize". So our payload becomes :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique4.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                I have println to check the size of my painting, and it is indeed size 1! We'll be able to rebuild our flag like that!<br>
+                Go last problem but which is easily solved, how to have the size of the array, given that the code is never executed?<br>
+                Remember, at the beginning, with my research, I saw that at the compilation, rust knew the size of the table. You just have to assign as value to a variable the cells, which takes the 48,49,50,... (because the characters are stored from 48 to 126). <br>
+                The code will compile until I try to assign as the value of the variable: len(array)+1. So, I would know that the character I should take is the current value of the loop.<br><br>
+                (Sidebar)<br>
+                In my definition of the table I only assign zeros to it, which allows me to access the<br>
+                different boxes on the board.<br>
+                (End of sidebar)<br><br>
+                To check this, I try with the first character, which is normally an "F":<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique5.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                So the first character is 69, let's output python: chr(69) = F.<br>
+                Perfect! Now we just have to build a script that will do this for us:  <br> 
+            </p>
+            <div class="text-center">
+                <img src="../img/rustique6.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                After long minutes, I recover the entire flag:<br>
+                FCSC{a35036487430b24da38b43e1369f56e69a25bd39e594cd1e7ff3e97b62b3c638}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

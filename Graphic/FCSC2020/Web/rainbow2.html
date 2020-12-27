@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Web - RainbowPages v2</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../web.html" title="Web">Web</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">RainbowPages v2</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Web - RainbowPages v2</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ------------------------------------------------------------------------------------------------------------------------------------------------------<br>
+                RainbowPages v2<br>
+                La première version de notre plateforme de recherche de cuisiniers présentait quelques problèmes de sécurité. <br>
+                Heureusement, notre développeur ne compte pas ses heures et a corrigé l'application en nous affirmant que plus rien n'était désormais exploitable. <br>
+                Il en a également profiter pour améliorer la recherche des chefs.<br>
+
+                Pouvez-vous encore trouver un problème de sécurité ?<br>
+                ------------------------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                This is the v2 of the first challenge, <a href="http://localhost:3000/Graphic/FCSC2020/Web/rainbow1.html">RainbowPages</a>.<br>
+                So, we now that in the back-end, there is a GraphQL service which is running.<br>
+            </p>
+            <p class="lead" style="color: white;">
+                Here, the approach is totally different, in fact, it is no longer the whole query that passes but only what one is looking for. <br>
+                Indeed, if we analyze the queries, we see our search passing, encoded in base64 : <br><br>
+                YQ== ,which is equivalent to: « a ».<br><br>
+                This totally changes the service's search for a flaw in the service. We are no longer going to try to directly pass another request, but we are going to try to identify the request that is made on the server side, so that we can exploit it.<br>
+                If we search for a cook not from the search bar but directly from the URL, we see the entire GraphQL response :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We quickly notice that we are "blocked" in "AllCooks", and that the server will only query on this and not on the other nodes.<br>
+                Let's now move on to the identification of the request that runs on the server side. To do this, I performed several tests :<br><br>
+                        A) Identifying the fields that our input is passed over:<br>
+                        When we search "a", the server returns names and surnames containing "a": <br>
+                        First observation, the search is surely done on the names and surnames of the cooks.<br>
+                        To verify this hypothesis, I looked for a letter that could be found in both names and surnames, but not in both at the same time.<br>
+                        When we test the letter "h", we see that the waiter returns first names containing an "h", but not the family name, and vice versa.<br>
+                        We are now sure that the server passes our input in at least two fields: the first name and the last name.<br><br>
+
+                        B) Is the server filtering with other fields?<br>
+                        Now we'll find out if the waiter's filtering on the cook's specialty, too. So I try to pass "Breton", with no apparent return. <br>
+                        So I'm sure now, the only two fields in which my input is passed are: firstname and lastname. <br>
+                        I know this because it's quite easy to determine the name of the fields, by querying not from the search bar but from the URL, as you can see in the previous picture.<br><br>
+
+                        C) Is is an AND or an OR filter?<br>
+                        Last check before constructing the server-side request, is the filter OR or AND? This question is solved by the test that was done with the letter "h". <br>
+                        The server returned cook results, some of which contained "h" in their last name but not in their first name and vice versa. <br>
+                        The filter applied is therefore of the OR type.<br><br>
+
+                        If we look again at the request that was made during the first challenge, we can easily adapt it to this second challenge, knowing that there is a double filtering of the results thanks to an OR :<br><br>
+                        { allCooks (filter: { or: [{firstname: {like: "<USER INPUT>"}}, {lastname: {like: "<USER INPUT>"}}]}) { nodes { firstname, lastname, speciality, price }}}<br><br>
+
+                        The server-side query is therefore built, we will now switch to the means of exploiting it at our advantage.<br>
+                        We now know which characters we must escape. But one problem will arise: what to do with the rest of the request that we don't wish to execute?<br>
+                        To alleviate this problem, I've done some research to find the comment character in GraphQL. After several searches, I find it, it's the #.<br>
+                        Now we all have in our hands to be able to exploit this query to our advantage. So we will have to escape the first user input. <br>
+                        Nothing could be simpler, just look at the characters that close the second user input: " }}]})". <br>
+                        To this, we will have to add the double quote escape, so that our input is no longer interpreted as a simple string, but as code.<br>
+                        So I'm testing this request, encoded in base64: "}}]})#.<br>
+                        The server returns me nothing but without error, this is the good way!<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow2-1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Our payload thus becomes: " +"}}}}) { nodes { firstname, lastname, speciality, price}}}__schema{types{name}}}# ".<br>
+                 I added a plus before closing the quote so as not to have the return of all the chefs, and to have only the return of "__schema{types{name}} ".<br>
+                 Furthermore, I've added the nodes of allCooks, to avoid the errors due to that.<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow2-2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                One result is very interesting: "FlagNotTheSameTableName", so we have the table where the flag is located. <br>
+                Since the name of the table has changed between the first and the second challenge, we can largely assume that the name of the field containing the flag too, so we will now list the name of the fields of this table with the following payload:<br><br>
+                +"}}}]}) { nodes { firstname, lastname, speciality, price }}__type (name: "FlagNotTheSameTableName") {name fields{name type{name kind ofType{name kind}}}}}}#<br><br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow2-3.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                So we execute our final payload, with a small change, instead of putting "FlagNotTheSameTableNames", we'll put "allFlagNotTheSameTableNames", to avoid any error, which will allow to recover the flag. So the final payload is :<br><br>
+                +"}}}){nodes{firstname,lastname,speciality,price}}allFlagNotTheSameTableNames{nodes{flagNotTheSa meFieldName}}}#<br><br>
+                So we get our precious flag back:<br>
+                FCSC{70c48061ea21935f748b11188518b3322fcd8285b47059fa99df37f27430b071}.
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

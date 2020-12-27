@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Forensic - Dans les nuages</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../forensic.html" title="Forensic">Forensic</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Dans les nuages</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Forensic - Dans les nuages</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ----------------------------------------------------------------------------------------------------------------------------------------------------<br>
+                Académie de l'investigation - Dans les nuages<br>
+                Le poste en cours d'analyse est connecté à un serveur web à l'adresse 10.42.42.132. Le serveur web est protégé par une authentification.<br>
+
+                Retrouvez le nom d'utilisateur et le mot de passe de cette connexion.<br>
+                ----------------------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                First of all, I'm not going to detail all the avenues I've explored to solve this challenge. I'm only going to show the right steps to solving it. <br>
+                If you want the complete research process, contact me via my Twitter. <br><br>
+                Given the difficulty of the challenge, you shouldn't try to flag in a too "random" way, so I'm thinking about a way that could certify me the location of the password, as well as the username in the memory.<br>
+                So I decide to put down a sheet of paper, to see the elements I've gathered, and that could help me to solve this challenge.<br>
+                So I come to the conclusion that, to be sure of the location of the password in the memory, I must have a second dump that faithfully reproduces the identification in the dump.<br>
+                So we're going to make our own dump! Remember at the beginning, with my research for the other challenges, I had observed two things:<br>
+                    - There is a nginx server<br>
+                    - Authentication is basic auth on /panel<br>
+                So we're going to set this up in the virtual machine:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/nuages.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We add this line in the nginx configuration. I chose as username and password very identifiable words, to recognize them directly in the dump :<br>
+                    - Username: JESUISUNUSERNAME<br>
+                    - Password: C3C1ESTUNPASSWORD<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/nuages2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Perfect, we have faithfully reproduced the authentication used in the dump!<br>
+                We will now do a memory dump, thanks to <a target="_blank" href="https://github.com/504ensicsLabs/LiME">LiMe</a>. I won't describe here how to do it, it's very well explained on the github that hosts the project.<br><br>
+                Be careful, I didn't specify it, but you have to use the chromium browser, as in the challenge dump, for the comparison of the two to be efficient.<br>
+                Once I've recovered my second dump, there are several hypotheses:<br>
+                    - "The difference" between the password and the username is the same, no matter how chromium is used.<br>
+                    -  Dump all chromium processes from my own dump, identify where the username and password are, and do the same in the challenge dump.<br>
+                Here's a problem: I have two potential usernames, and I may be missing some.<br><br>
+                So I decide to focus on the username in the chall's dump, to be 100% sure and refine my next searches on the password.<br>
+                I dump all the chromium processes in my dump, and I observe that my username is not present in it, which seems very strange to me, given the very recognizable value it has. <br>
+                So I check on the internet, and, on a stack overflow forum, a person advises to look at the strings of the file in UTF-16, and not in UTF-8, which results in the -el option of the strings command.<br>
+                So I do this on my dump, and miraculously, my username and password appear!<br>
+                So I assume that it must be the same on the challenge dump. So I will string the challenge dump with this option, to see if other username appear:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/nuages3.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                (Aside)<br>
+                Throughout my research, I kept in mind that the flag was case sensitive, so I had a big doubt that Admin3 was the username. (but that was just a guess).<br>
+                (End of the aside)<br><br>
+                A very interesting username comes up: Admin3Kz7. So I decide to add it to my list of potential username, which becomes :<br>
+                    - Admin3<br>
+                    - Admin3Kz7<br>
+                Now, to check 100% of the username, I will dump the chromium processes of the challenge one by one, and check if I find "Admin3" or "Admin3Kz7" in it.<br>
+                After one hour, I filtered them all, by doing the command : strings -el * | grep -i "Admin3" on it, and only one came back with a result :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/nuages4.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                When you extract everything related to it with the command:<br>
+                volatility --profile=Linuxdebian-5-4-0-4-amd64x64 -f dmp.mem linux_dump_map -p 119187 --dump-dir dump/<br><br>
+            </p>
+            <p class="lead" style="color: white;">
+                It can be seen that this process contains : Admin3Kz7.<br>
+                So I am now 100% sure that the username is Admin3Kz7, and that the password is in the dump of process 119187.<br>
+                Indeed, if I compare with my own dump, the username and the password are in the same dump of the chromium process, we can easily reach the conclusion I drew above.<br>
+                Moreover, in my dump, I noticed that the username and the password were "next to each other", I know that this notion is very abstract in forensic, but it was my last lead. <br>
+                In my dump, we can see that the username and the password are 7 strings apart:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/nuages5.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                I therefore deduce that in the challenge dump, and more particularly in the dump of the chromium process, it must be almost identical:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/nuages6.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Here, the only interesting string that strongly resembles a password is: "5sdtYh68".<br>
+                I also kept in mind that the flag was case sensitive, so I came to the conclusion that the credentials used for the connection were right in front of me.<br>
+                Indeed, we have a pretty self-explanatory username, and a string that looks like a password. <br>
+                Moreover, the connection between the two dumps is quite strong, and doesn't leave too much room for randomness, except for the location of the string, but randomness was not very important.<br>
+                So I decide to try this, and it's correct! The password was right: 5sdtYh68!<br>
+                So we have our flag:<br>
+                FCSC{Admin3Kz7:5sdtYh68} !
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

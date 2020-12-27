@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>BASH - Level 3</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../bash.html" title="Bash">Bash</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Level 3</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Bash - Level 3</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                -----------------------------------------------------------------------------------------------<br>
+                Level 3<br>
+                Prompt: Connect to ssh level3@challenge.auctf.com, use as password the flag of level2.<br>
+                -----------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                We see a file named passcodes.sh, let's see what in it:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/level3.png" class="img-fluid" alt="Responsive image">
+            </div><br>
+            <p class="lead" style="color: white;">
+                We see that the program ask for a random number, let's run it : echo 2000 | ./passcodes.sh :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/level3-1.png" class="img-fluid" alt="Responsive image">
+            </div><br>
+            <p class="lead" style="color: white;">
+                When we make an ls -la, we see that passcodes.sh have to be execute as level4, not level3. So to get the flag, i've to launch the program as level4.<br>
+
+                So I wrote a script in bash that will always try the number 2000, until the randomly generated number is also 2000 :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/level3-2.png" class="img-fluid" alt="Responsive image">
+            </div><br>
+            <p class="lead" style="color: white;">
+                After a few minutes, I get the flag: auctf{wut_r_d33z_RaNdom_numz}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Web - RainbowPages</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../web.html" title="Web">Web</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">RainbowPages</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Web - RainbowPages</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ------------------------------------------------------------------------------------------<br>
+                RainbowPages<br>
+                Nous avons développé une plateforme de recherche de cuisiniers. Venez la tester !<br>
+                ------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                First, let's identify what's running on the back-end!<br>
+                Looking at the query, we notice that there is a "search" parameter that is passed. So we will directly query the URL to get the full response from the server.<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Such a beautiful GraphQL error.. :)<br>
+                So, let's now examine the entire query which is send to the server : <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1-1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                A beautiful request encoded in base64, which gives us the structure of the GraphQL behind it. <br>
+                The request being absolutely unfiltered, we can pass all what we want, so let's pass different payloads to go read our flag!<br><br>
+                {__schema{types{name}}} : To list all things in the GraphQL db :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1-2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                A beautiful flag node appears! Let's go query it !<br>
+                First things : list what this node contains !<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1-3.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Response from the server: <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1-4.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                The column we're interested in is "flag", let's see what's in it.
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1-5.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                I decide to query on allFlags because it allows to query in all content flag nodes, so we are sure not to make a mistake.<br>
+                Response from the server: <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/rainbow1-6.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>

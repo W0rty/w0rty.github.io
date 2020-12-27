@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Forensic - Rédaction</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../forensic.html" title="Forensic">Forensic</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Rédaction</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Forensic - Redaction</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ---------------------------------------------------------------------------------------------------------------------------------------<br>
+                Académie de l'investigation - Redaction<br>
+                Le document note.docx vient d'être créé avec LibreOffice et enregistré avant le dump de la mémoire. Retrouvez son contenu !<br>
+
+                ---------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                First, let's retrieve the PID from the LibreOffice process, filtering with .docx, to refine our research:
+            </p>
+            <div class="text-center">
+                <img src="../img/redaction.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                So, the PID we're going to focus on is PID 119615. <br>
+                With a little analysis, I realize that the path to the note.docx file is mapped in memory, but not its contents. So we'll have to look somewhere else.<br>
+                So I'm going to dump everything related to the LibreOffice PID: <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/redaction1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                In this kind of dump, you have to look at the pile, as well as the stack. So let's dump the contents of the stack, in which we should normally find the contents of the note.docx file :<br>
+                volatility --profile=Linuxdebian-5-4-0-4-amd64x64 -f dmp.mem linux_dump_map -p 119615 -s 0x000056361c0cb000 --dump-dir dump/<br>
+                I'll spare you the research work, but in the middle of the document, we find the contents of note.docx, so we have our flag: <br>
+                FCSC{PQHJRTSFYH-3467024-LSHRFLDFGA}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Crypto - Shifty Shwoozy</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../crypto.html" title="Crypto">Crypto</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Shifty Shwoozy</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Crypto - Shifty Shwoozy</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                -------------------------------------------------------------------------------------------------------------------------<br>
+                Shifty Shwoozy<br>
+                Prompt:
+                Eve woke up to this message after a really crazy night. Everything is shifted around. Can you figure out what it says?<br>
+
+                You can download the message here:<br>
+                https://drive.google.com/file/d/1hshUoTtN5tgVjbpRNDujmBnKOJbJZcbS/view?usp=sharing<br>
+                -------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                When I downloaded that file, I immediately thought we were dealing with a vigenere cipher. <br>
+
+                Personally, I use a site that works very well for the figure of vigenere: https://www.mygeocachingprofile.com/codebreaker.vigenerecipher.aspx. <br>
+
+                So we enter a part of the ciphered text inside, we wait a few minutes, and the encryption key comes out: COINCIDENCESMAYHELPYOUSOLVETHISPROBLEM. <br>
+
+                
+                So we decipher all the text with this key. <br>
+                In the middle of the text, which is an excerpt from The Great Gaby, we notice: sometimes you have to do things yourself. <br>
+                Replace the spaces with underscores and wrap it in the usual format. <br>
+
+                So we have our flag: auctf{sometimes_you_have_to_do_things_yourself}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

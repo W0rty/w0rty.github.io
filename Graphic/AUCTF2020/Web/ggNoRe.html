@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Web - ggNoRe</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../web.html" title="Web">Web</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">ggNoRe</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Web - ggNoRe</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ---------------------------------------------------------------------------------------------------<br>
+                ggNoRe<br>
+                A junior dev built this site but we want you to test it before we send it to production.<br>
+                ---------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                When you get to the site, you see: "Nothing to see here". So I decide to inspect the element, and there is a script: authentication.js. <br>
+                In this file, we see an array containing base 64, we decode it, and we get: "Send a get request to /hidden/nextstep.php". So we send a GET request to this page.<br><br>
+
+                When we analyze the headers, one spring in particular :<br>
+                ROT 13 : Fraq n cbfg erdhrfg gb /ncv/svany.cuc.<br>
+                We decode it, we get : Send a post request to /api/final.php.<br><br>
+
+                So we send a POST request to /api/final.php, the server replies: Send a post request with flag variable set.<br>
+
+                So we modify our request to send a flag variable in POST.<br>
+                We get our flag: auctf{1_w@s_laZ_w1t_dis_0N3}. 
+            </p>
+        </div>
+    </body>
+</html>

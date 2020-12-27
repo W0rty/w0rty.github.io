@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Forensic - Block 2</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../forensic.html" title="Forensic">Forensic</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Block 2</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Forensic - Block 2</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                --------------------------------------------------------------------------------------------------<br>
+                Prompt:<br>
+                Billy runs a minecraft server. He wants to know which block was rolled back. Can you help him?<br>
+
+                NONSTANDARD FLAG FORMAT: Insert the unix timestamp of the row into auctf{time_stamp}<br>
+
+                https://drive.google.com/open?id=1lxgtuF3zthgrCNEwaJ8k_EdoEymukTMG<br>
+                ---------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                When you download the file, you'll notice that it's an .sql. <br>
+
+                To read it, I upload it to the mySQL service on Ubuntu. <br>
+                In the description, we notice that it talks about "rolled back", as if by chance, in the database, one of the columns is called "rolled_back", and is either 0 or 1, so we execute the query:<br>
+
+                SELECT * FROM block2 WHERE rolled_back=1;<br>
+
+                We get a single tuple response, so we get the timestamp: 1581060905.<br><br>
+
+                We get our flag: auctf{1581060905}.
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

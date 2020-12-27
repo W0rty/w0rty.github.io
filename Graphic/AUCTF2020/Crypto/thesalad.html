@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Crypto - The Salad</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../crypto.html" title="Crypto">Crypto</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">The Salad</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Crypto - The Salad</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                --------------------------------------------------------------------------------------------------------------<br>
+                The Salad<br>
+                Prompt: 
+                Bob and Alice love to go to the local farmer's market to get their groceries. You could call them regulars. <br>
+                They know the farmers so well that they've started sharing secret messages with them. <br>
+                Here's one of the messages they wrote to one lettuce farmer. <br>
+                vpxoa{eP5o_4_R4mH_pK_1_4421_9952} <br>
+                --------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                We notice directly, with the name of the challenge, that we are dealing with a Caesar code. So we go to a site that allows us to decipher the Caesar code.<br>
+
+                The offset is 21, so we get the flag: auctf{jU5t_4_W4rM_uP_1_4421_9952}.
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

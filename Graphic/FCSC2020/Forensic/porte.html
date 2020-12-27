@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Forensic - Porte dérobée</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../forensic.html" title="Forensic">Forensic</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Porte dérobée</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Forensic - Porte derobee</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ---------------------------------------------------------------------------------------------------------------------------------------<br>
+                Académie de l'investigation - Porte derobee<br>
+                Un poste distant est connecté au poste en cours d'analyse via une porte dérobée avec la capacité d'exécuter des commandes.<br>
+
+                Quel est le numéro de port à l'écoute de cette connexion ?<br>
+                Quelle est l'adresse IP distante connectée au moment du dump ?<br>
+                Quel est l'horodatage de la création du processus en UTC de cette porte dérobée ?<br>
+
+                ---------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                There will be an intermediate step, because, we need volatility for the next challenges.<br>
+                But, the kernel version is exotic, and volatility can't determine a profile on our dump.<br>
+                So we need to create our own volatility profile to allow us to examine the dump.<br>
+                But remember, we have the kernel version, and after a quick analysis, I know that the debian running behind it is a test version of Bullseye. So let's find an ISO to match it!<br><br>
+                After several researches, I come across this official debian page, which proposes exactly what I want, so I decide to download this ISO and mount a VM :<br>
+                <a target="_blank" href="https://cdimage.debian.org/cdimage/bullseye_di_alpha2/amd64/iso-cd/">Debian bullseye kernel version 5.4.0-4-amd64.</a>
+            </p>
+            <div class="text-center">
+                <img src="../img/kernel.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                After installing the VM, I created my volatility profile by following the following <a target="_blank" href="https://www.andreafortuna.org/2019/08/22/how-to-generate-a-volatility-profile-for-a-linux-system/">tutorial.</a><br>
+                Great, we have our profile for the next challenges, so let's start analyzing the memory dump.<br>
+                We know that a reverse shell is usually with netcat, so let's look in the dump what can match with that :
+            </p>
+            <div class="text-center">
+                <img src="../img/porte.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We have two PIDs, one of which is very interesting, number 1515, so let's base ourselves on that for our future analyses and find the elements we're looking for.<br>
+                So we potentially have the time the order was launched: 2020-03-26 23:24:20.<br>
+                Let's use the netstat command, filtering with note previous result, to find the information :<br><br>
+            </p>
+            <div class="text-center">
+                <img src="../img/porte2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Knowing that the PID number is 1515, we retrieve the two pieces of information we are interested in, and we have our flag: <br>
+                FCSC{36280:fd:6663:7363:1000:55cf:b9c6:f41d:cc24:2020-03-26 23:24:20}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

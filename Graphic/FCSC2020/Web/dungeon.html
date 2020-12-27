@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Web - EnterTheDungeon</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../web.html" title="Web">Web</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">EnterTheDungeon</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Web - EnterTheDungeon</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ------------------------------------------------------------------------------------------<br>
+                EnterTheDungeon<br>
+                On vous demande simplement de trouver le flag.<br>
+                ------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                We're being asked for input, so let's go analyze the source code of the page. In this, we see: <br><br>
+                Pour les admins : si vous pouvez valider les changements que j'ai fait dans la page "check_secret.php", le code est accessible sur le fichier "check_secret.txt"<br><br>
+                Great, so let's read check_secret.txt :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/dungeon.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                You'll think, but the yew test is impossible! Normally yes, but take a good look, it uses == instead of === to compare, so that leaves room for a PHP Type Juggling. <br>
+                So we just need to find a string that starts with 0e, and when it is hashed in md5, the beginning is also 0e.<br>
+                Easy as pie, let's Google it!<br><br>
+                
+                With two minutes of research, I fall on this git : https://github.com/bl4de/ctf/blob/master/2017/HackDatKiwi_CTF_2017/md5games1/md5games1.md<br>
+                I read a little bit, and found what I was looking for : <br>
+                md5(0e215962017) = 0e291242476940776845150308577824<br>
+                Perfect, let's break this website !<br>
+                We send this to the server, and we are admin, beautiful.<br>
+                Flag : FCSC{f67aaeb3b15152b216cb1addbf0236c66f9d81c4487c4db813c1de8603bb2b5b}
+            </p>
+            </div>
+        </div>
+    </body>
+</html>

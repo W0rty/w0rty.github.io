@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Web - API Madness</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../auctf2020.html" title="AUCTF - 2020">AUCTF - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../web.html" title="Web">Web</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">API Madness</li>
+            </ol>
+        <div class="row d-flex" >
+          <div class="d-flex flex-column" ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">AUCTF 2020 - Web - API Madness</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ---------------------------------------------------------------------------------------------------<br>
+                API Madness<br>
+                We are building out our new API. We even have authentication built in!<br>
+                ---------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                We arrive on the site, which suggests us to look at /static/help, we reach this page, which answers us:<br><br>
+
+                POST: <br>
+                /api/login <br>
+                /api/ftp/dir <br>
+                /api/ftp/get <br><br>
+                
+                First of all, I tried to send the username and password parameters in the classical way: http://challenges.auctf.com:30023/api/login?username=admin&password=admin.<br>
+                The server replies with a 400 Bad Request.<br>
+                So this is not the way to pass the information in POST. <br>
+
+                So I choose to send them in JSON format.<br><br>
+
+                So we send this request (on the endpoint /api/login), thanks to curl : <br>
+                curl -X POST -H 'Content-type: application/json' -d '{"username": "username", "password": "password"}' http://challenges.auctf.com:30023/api/login<br>
+
+                It takes several minutes for the server to respond. The response is weird, it's a python stack trace. In this trace, we notice that /api/login calls /api/login_check with the JSON passed in parameters. <br>
+                Moreover, we notice that if the passed login is valid, the server answers us with a token.<br><br>
+
+                So we try several identifiers on this endpoint, we find :<br>
+                username:username<br>
+                admin:admin<br><br>
+
+                So we type on the endpoint /ftp/api/get: <br>
+                curl -X POST -H 'Content-type: application/json' -d '{"token": "token_hash", "dir":""."}' http://challenges.auctf.com:30023/api/ftp/dir<br><br>
+
+                With the response from the server, we notice that there is a flag.txt file. So we send this request :<br>
+                curl -X POST -H 'Content-type: application/json' -d '{"token": "token_hash", "file": "flag.txt"}' http://challenges.auctf.com:30023/api/ftp/get_file<br><br>
+
+                We get the flag in base64: YXVjdGZ7MHdAc3BfNnJvSzNOX0B1dGh9Cg==<br>
+                We decode it, we get: auctf{0w@sp_6roK3N_@uth}.
+                    </p>
+        </div>
+    </body>
+</html>

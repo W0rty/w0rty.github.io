@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <link href="./css/terminal.css" rel="stylesheet" type="text/css" />
+        <script src="./js/terminal-effect.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Worty Cyber Blog - FCSC 2020</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav mr-auto cen">
+                <li class="nav-item">
+                <a class="nav-link" href="/Graphic/index.html">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+        <ol class="breadcrumb">
+            <li><a href="./write-ups.html" title="Write ups">Write Ups</a></li>
+            <h1 style="margin-left:20px;"></h1>
+            <li class="active">FCSC - 2020</a></li>
+        </ol>
+        <div class="container-fluid" style="background-color: #444;">
+            <div class="row d-flex" >
+            <div class="d-flex flex-column" ></div>
+                <div class="jumbotron w-100" style="background-color: #444;">
+                <h1 class="display-2" style="color: white;">Worty's Write up : FCSC 2020</h1>
+                <p class="lead" style="color: white;">Here, you will find write up for the FCSC2020, sorted by category. Furthermore, you will find the final result of this competition, organized by ANSSI.</p>
+                <hr class="my-2">
+                </div>
+                <div class='console-container w-100' style="background-color: #444;">
+                    <span id='text'></span>
+                    <div class='console-underscore' id='console'>&#95;</div><br>
+                    <a style="color: #FFFFFF" href="./FCSC2020/forensic.html" class="lead" id="forensic" onmouseover="change('forensic','over')" onmouseout="change('forensic','out')">Forensic</a>
+                    <a style="color: #FFFFFF" href="./FCSC2020/misc.html" class="lead" id="misc" onmouseover="change('misc','over')" onmouseout="change('misc','out')">Misc</a>
+                    <a style="color: #FFFFFF" href="./FCSC2020/pwn.html" class="lead" id="pwn" onmouseover="change('pwn','over')" onmouseout="change('pwn','out')">Pwn</a>
+                    <a style="color: #FFFFFF" href="./FCSC2020/web.html" class="lead" id="web" onmouseover="change('web','over')" onmouseout="change('web','out')">Web</a>
+                    <a style="color: #FFFFFF" href="./FCSC2020/result.html" class="lead" id="result" onmouseover="change('result','over')" onmouseout="change('result','out')">Final Placement</a>
+                  </div>
+            </div>
+        </div>
+        <script>consoleText(['root@:~$ FCSC 2020'], ['limegreen']);</script>
+    </body>
+</html>

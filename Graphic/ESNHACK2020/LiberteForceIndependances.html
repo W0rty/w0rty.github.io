@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>LiberteForceIndependance</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">ESN'HACK - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">LiberteForceIndependance</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">ESN'HACK 2020 - Web - LiberteForceIndependance</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                ----------------------------------------------------------------------------------------------------------------------------------------------------------<br>
+                LiberteForceIndependance<br>
+                Le parti politique Liberte Force et Independance souhaite prendre le pouvoir par les armes et reprendre le controle des serveurs du monde entier.<br>
+                Leur objectif s'emparer de l'internet en profitant du désespoir des sys-admins durant le bug de l'an 2000 - Y2K.<br>
+                Aidez-nous à prendre le controle de leur serveur en récuperant leur secret dans /root/flag.txt<br>
+                ----------------------------------------------------------------------------------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+              When we arrive on the challenge page, the index doesn't tell us much, it's time to look at the robots.txt and the source code!<br>
+              We have an empty robots.txt file, and an useless source code to the resolution of the challenge :
+            </p>
+            <div class="text-center">
+              <img src="./img/robots.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <div class="text-center">
+              <img src="./img/source.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              So we can't find anything interesting, so it will be necessary to use dirb to list what's on the server.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/dirb.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              That's it! There is a .git folder accessible! It will be necessary now to recover it in its entirety to see what it contains!<br>
+              To do so, I'm going to use a tool found on git that allows me to retrieve the whole .git folder and rebuild it. You can find this tool <a href="https://github.com/internetwache/GitTools">here</a>.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/dumper.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              Great! We now have the .git folder, to be able to display the different commits, I'm going to use the tig command.<br>
+              This command allows to display the files contained in objects/, which, basically, can't be read because they are compressed.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/tig.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              So we have a database password, a little bit of dirb tells us that a phpmyadmin service is running on the server, so now we just have to use the credentials found in the .git folder to connect to it!<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/pma.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              Remember that the goal of this challenge is to read the file contained in /root/flag.txt, so we will have to find a way to connect in reverse shell to the server.<br>
+              If you pay attention to the phpmyadmin image, the version used is old, and is vulnerable to a LFi to RCE. <br>
+              Indeed, it will be enough to query with php code in the SQL command, then access its PHP session. For more information about this vulnerability, you can visit the CVE sheet <a href="https://blog.vulnspy.com/2018/06/21/phpMyAdmin-4-8-x-Authorited-CLI-to-RCE/">here</a>.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/sql.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              Now we have to find our session. I know that with phpmyadmin, sessions are contained in the /tmp file, in the form: sess_{ID}. <br>
+              So we get our {ID} from the cookies, and then we access it via our LFI.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/sess.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              The path to access our php session is therefore the following: http://liberteforceindependance.ctf.esnhack.fr:8080/phpmyadmin/index.php?target=db_sql.php%253f/../../../../../../../../tmp/sess_5ecda10b2d3ac8359bb3a8e69ca83ae1&cmd=ls .<br>
+              And with the GET parameter "cmd", we can execute command, and connect remotely to the server.<br>
+              For example, we can execute "whoami":<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/cmd.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              There are several ways to connect to the server, you can find different payloads <a href="https://www.asafety.fr/reverse-shell-one-liner-cheat-sheet/">here</a>.<br>
+              We'll just have to place this command in our GET cmd parameter and then wait for the local server connection, using netcat (nc -lvp 4444).<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/connect.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              Now that we are connected to the server, we will have to find a way to read the /root/flag.txt file.<br>
+               To do so, I will use a "LinEnum.sh" script that will look at the Linux version, the SUIDs, ...<br>
+               After LinEnum is finished its work, I notice directly what will allow us to get the flag, there is an S bit on the base64 binary.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/base64.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              We just have to read the file thanks to the base64 command by redirecting the output to /tmp.<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/exploit.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+            <p class="lead" style="color: white;">
+              And the challenge is over! We get our flag!<br>
+            </p>
+            <div class="text-center">
+              <img src="./img/flag.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div><br>
+        </div>
+    </body>
+</html>

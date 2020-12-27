@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../css/terminal.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="../js/terminal-effect.js"></script>
+        <title>Pwn - Why not a sandbox?</title>
+    </head>
+    <body style="background-color: #444;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+            <a class="navbar-brand" href="#">Worty's blog</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            
+              <div class="collapse navbar-collapse" id="navbarColor02">
+                <ul class="navbar-nav mr-auto cen">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/Graphic/index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/write-ups.html">Write ups</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/Graphic/cheatsheets.html">Cheatsheets</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/Terminal/index.html">Terminal version</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://twitter.com/WortySTO">Twitter</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" target="_blank" href="https://www.root-me.org/Worty">Root Me</a>
+                </li>
+                </ul>
+              </div>
+            </nav>
+            <ol class="breadcrumb">
+                <li><a href="../../write-ups.html" title="Write ups">Write Ups</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../../fcsc2020.html" title="FCSC - 2020">FCSC - 2020</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li><a href="../pwn.html" title="Pwn">Pwn</a></li>
+                <h1 style="margin-left:20px;"></h1>
+                <li class="active">Why not a sandbox?</li>
+            </ol>
+        <div class="row d-flex " >
+          <div class="d-flex flex-column " ></div>
+            <div class="jumbotron w-100 text-center" style="background-color: #444;">
+              <h1 class="display-2" style="color: white;">FCSC 2020 - Pwn - Why not a sandbox?</h1>
+              <hr class="my-2">
+              <p class="lead" style="color: white;">
+                -------------------------------------------------------------------------------<br>
+                Why not a sandbox?<br>
+                Votre but est d'appeler la fonction print_flag pour afficher le flag.<br>
+                -------------------------------------------------------------------------------<br>
+            </p>
+            <p class="lead" style="color: white;">
+                In the first part of this test, I made the mistake of starting directly on my knowledge, without looking around, which is why I wasted a lot of time. <br>
+                Indeed, I figured it must be a basic jail, or you have to look for the function somewhere. in the subclasses. So I started by entering several payloads:<br>
+                ().__class__.__base__.__subclasses__()<br>
+                I started to search the modules, the builtins, without finding a single trace of the famous function print_flag.<br>
+                After several hours, I came back to 0. I tried to import the os module, and one of the errors made me ...catch my eye:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                I hadn't seen this mistake before because I was only paying attention to the "Forbidden Action", a question comes to me very quickly: What is an audit hook?<br>
+                After several searches on the internet, I came across an article:<br>
+                https://www.python.org/dev/peps/pep-0578/, which talks about audit hooks in python3.8.<br>
+                One of the sections of this article catches my eye, "Why not a sandbox ? "Well, well, well, the same name as the challenge, it can't be a coincidence. So I'm going with the assumption that we're dealing with an audit hook. <br>
+                By finding out a little bit more on this, I come across articles that talk about cpython, in other words, c code with code python.<br>
+                In these articles, he talks about a module used in these cases: The ctypes module, in python. So I try to import it, and succeed, it works, no forbidden action. <br>
+                So I decide to I'm interested in the ctypes module, on the one hand in the jail and on the other hand in the documentation of python.<br>
+                I'll talk about what I found in the documentation later, because it's not useful in the first part of this challenge.<br>
+                In the jail, so I'm going to list what ctypes contains. I'm using one of my "techniques" in the jail, which is to consists in storing the result of dir(ctypes) in a variable.<br> 
+                I make a loop on this variable to get a better view on what ctypes (or the module I'm interested in) contains:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox1.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Something very interesting, our ctypes module contains _os, so we will be able to call system functions and potentially pop a shell!<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox2.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Unfortunately, "system" is a forbidden action in the audit hook, so we'll have to use another way: execl.<br>
+                execl is similar to system and allows you to execute shell commands, its syntax is a bit different, but it does pretty much the same thing as system.<br>
+                So we pop a shell with the following payload:<br><br> 
+                print(ctypes._os.execl("/bin/bash", "-i").read())<br><br>
+                We could also have gone through popen, but the shell was not interactive, i.e. we could only see the result of our commands after exiting the shell, which is not very practical.<br>
+                First command to start our analysis: ls<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox3.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                This is where I understand why I didn't see the print_flag function in the subclasses, as I did at the beginning. <br>
+                This function is contained in a .so file, in other words, c code. <br>
+                My cpython hypothesis is thus confirmed at that time, and thus explains the presence of functions allowing to interact with c in the ctypes module.<br>
+                Having the name of the library, I think, with the help of ctypes, I'll be able to load it in the binary, and then call the print_flag function. <br>
+                After several searches, I find that the CDLL function takes as parameters a .so file to import it in a python script. Let's test this! <br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox4.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Unfortunately, the audit hook prevents me from calling this function. So the jail won't be solved that easily.<br><br>
+                Since I don't have any rights on the lib_flag.so file, I figure that this library must surely be loaded in the spython binary, because otherwise, solving the challenge will become very complicated.<br>
+                So I use the ldd command, which allows me to see which libraries are loaded in a binary, hoping that lib_flag.so will appear :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox5.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                The library is well loaded in the spython binary, my hypothesis is confirmed! For those who wonder, ldd displays "not found" for the path of lib_flag.so because it will look in the /usr/lib, /lib, /lib64, ... folders to find the path.<br>
+                Now, as shown above, the lib_flag.so library is in /app, so ldd can't find its path, but don't worry, it's in the binary ! This reassures me, because as shown above, I have by no means managed to call/load lib_flag.so.<br>
+                From then on, I read a lot of documentation about ctypes and audit hooks, to help me understand the jail better.<br><br>
+                So now I have to focus on the spython binary. I try to use hexdump, strings, .. on it, unfortunately none of these commands are available on the server. To allow me a better analysis, I'm going to get the spython binary on my PC. <br>
+                To do this, nothing could be simpler, we encode the spython file in base64, we store it in /tmp, we cat the file. Then, we paste the result in a website which allows the conversion from base64 to a file. <br>
+                So I download it, and find myself with spython on my PC, so I'll be able to analyze it.<br>
+                First reflex, we will string the file, which will allow to see the strings that are present in the spython binary :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox6.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We can easely deduce that the welcome function his in the lib_flag.so file.<br>
+                So, for now, I have to found the GOT address of Welcome, to make a pointer on it, and after all i can use that to call print_flag.<br>
+                Let's examine the GOT and the PLT :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox7.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                So, the welcome address is at 0x4098. <br>
+                One thing we have to pay attention to is that we have analyzed the spython binary in a static way, i.e. the addresses we have retrieved are actually offsets from the address base of the program once it is mapped into memory. <br>
+                In other words, on the server, the address of the Welcome pointer in the GOT is not 0x4098, but the spython base address plus 0x4098.<br><br>
+
+                So, now, i have to find a way to print the /proc/self/maps file to get the base address of spython.<br><br>
+                I'll spare you all the searching, but thanks to the __loader__ module of ctypes and its get_data function, you can retrieve what you want.<br>
+                To facilitate the exploitation, I write my payload in one line, to go look for the spython address base and add 0x4098 to it : <br><br>
+                got = int(ctypes.__loader__.get_data("../../../../proc/self/maps").decode().split("-")[0], 16) + 0x4098<br><br>
+                The principle is therefore as follows: We're going to make a first pointer point to a second pointer to get its value which will be the address of Welcome.
+                Here, I have read a lot of documentation on ctypes to know how to do this, especially for the cast (changing the type of a variable into another one) from an address into a pointer. To do this, we will use the following command:<br><br>
+                p = ctypes.cast(got, ctypes.POINTER(ctypes.c_int64))<br>
+                Reminder : the got variable contains the base address of spython + 0x40A8<br><br>
+                (Sidebar)<br>
+                Between the completion of the challenge and the write up, the address in Welcome's GOT changed from 0x4098 to 0x40A8, I can't explain that.<br>
+                (End of aside)<br><br>
+                Here, our p corresponds to the first pointer in the diagram. So it points to the pointer that points to Welcome. So we have to retrieve its value, nothing simpler:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox8.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                I've changed the display of p.contents from an int to a hexadecimal number, to show you the address. Finally, we have the address of Welcome in the server.<br>
+                Last step, we'll have to succeed in creating a function with ctypes, which, as a parameter, will take a void type function. (we can easily deduce that the Welcome and print_flag methods are of type void because they only display text).<br>
+                Again, a lot of documentation on ctypes to understand. So that gives us :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox9.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                Here, we will create a C function, hence the "C" in CFUNCTYPE, of the void type. To do this, we used the different things that ctypes offered us.<br>
+                Now we just have to create our object, and see if we call the function Welcome:<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox10.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                We finally managed to call our function Welcome! So our working hypothesis was good, Welcome is indeed the function that is called at the beginning of the program.<br>
+                Now we just have to succeed in calling the print_flag function. To do so, we're going to grope our way through it. I know it wasn't the best way to do it, but I preferred to do this to make sure we don't make mistakes.<br>
+                This is where we see the interest of generating the address of the first pointer in a line! After several tries, I come to the conclusion that the print_flag function is 0x14 further in memory than Welcome.<br>
+                The address of our print_flag function is therefore (if we take the example above): 0x7f699683f129.<br>
+                Let's call this famous method :<br>
+            </p>
+            <div class="text-center">
+                <img src="../img/sandbox11.png" class="img-fluid" alt="Responsive image"><br><br>
+            </div>
+            <p class="lead" style="color: white;">
+                That was a very good challenge with a very atypical jail. Thanks to admin!
+            </p>
+            </div>
+        </div>
+    </body>
+</html>
